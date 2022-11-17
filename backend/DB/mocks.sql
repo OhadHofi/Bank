@@ -1,6 +1,11 @@
-SELECT Category.category, SUM(Bank_Transaction.amount),
-    FROM Bank_Transaction JOIN TransactionCategory
-    ON Bank_Transaction.id = TransactionCategory.transaction_id
-    JOIN Category
-    ON Category.id = TransactionCategory.category_id
-    GROUP BY Category.category
+use bank;
+
+INSERT INTO bank_transaction
+OUTPUT Inserted.ID
+(amount, vendor, category)
+
+-- VALUES (200, "v2", "c1");
+
+-- SELECT category, sum(amount) FROM bank_transaction GROUP BY category
+
+SELECT * from Bank_Transaction

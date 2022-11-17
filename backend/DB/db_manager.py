@@ -1,4 +1,5 @@
 import pymysql
+from routers.transactions.transaction import Transaction
 
 DEFAULT_HOST = "localhost"
 DEFAULT_USER = "root"
@@ -16,66 +17,69 @@ class DB_Manager:
             cursorclass=pymysql.cursors.DictCursor
         )
     
-    def get_all_transactions_with_categories(self):
-        query : str = """   SELECT Bank_Transaction.id, Bank_Transaction.amount, Category.id, Category.vendor, Category.category
-                            FROM Bank_Transaction JOIN TransactionCategory
-                            ON Bank_Transaction.id = TransactionCategory.transaction_id
-                            JOIN Category
-                            ON Category.id = TransactionCategory.category_id;"""
-        with self.connection.cursor() as cursor:
-            cursor.execute(query)
-            result = cursor.fetchall()
-            return result
+    def get_all_table(self, table_name:str) -> list[Transaction]:
+        query : str = f"""SELECT * FROM {table_name}"""
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
+                return result
+        except Exception as error:
+            raise error
 
 
-    def add_transaction(self , amount:int, vendor:str, category:str):
-        add_bank_transaction_query : str =  """INSERT INTO Bank_Transaction (amount)
-                                                VALUES ('{amount}');"""
-        add_category_query : str =          """INSERT INTO Category (vendor, category)
-                                                VALUES ('{vendor}', '{category}');"""
-        add_transaction_category_query =    """INSERT INTO TransactionCategory (transaction_id, category_id)
-                                                VALUES(%d, %d);"""
-
-        with self.connection.cursor() as cursor:
-            cursor.execute(add_bank_transaction_query)
-            transaction_id:int = cursor.lastrowid
-
-            cursor.execute(add_category_query)
-            category_id:int = cursor.lastrowid
-
-            cursor.execute(add_transaction_category_query, [transaction_id, category_id])
-
-            self.connection.commit()
+    def add_transaction(self , transaction:Transaction) -> Transaction:
+        add_transaction_query : str =   f"""INSERT INTO Bank_Transaction (amount, vendor, category) VALUES ({transaction.amount},"{transaction.vendor}","{transaction.category}");"""
+        
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(add_transaction_query)
+                transaction_id:int = cursor.lastrowid
+                transaction.set_id(transaction_id)
+                self.connection.commit()
+                return transaction
+        except Exception as error:
+            raise error
 
 
 
 
-    def delete_transaction(self, transaction_id: int, category_id: int):
-        delete_by_id_query : str =  """DELETE FROM %s WHERE id=%d;"""
-        delete_transaction_category_query : str =   """DELETE FROM TransactionCategory 
-                                                    WHERE transaction_id={transaction_id} AND category_id={category_id};"""
+    def delete_by_one_number_key(self, table_name:str, key_name:str, value:int) -> list[Transaction]:
+        delete_by_one_number_key_query : str = f"""DELETE FROM {table_name} WHERE {key_name}={value};"""
+        find_by_one_number_key_query : str = f"""SELECT FROM {table_name} WHERE {key_name}={value};"""
 
-        with self.connection.cursor() as cursor:
-            cursor.execute(delete_by_id_query, ["Bank_Transaction", transaction_id])
-            cursor.execute(delete_by_id_query, ["Category", category_id])
-            cursor.execute(delete_transaction_category_query)
-            self.connection.commit()
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(find_by_one_number_key_query)
+                result = cursor.fetchall()
+                if(cursor.execute(delete_by_one_number_key_query) == 0):
+                    raise ValueError('transaction not exist')
+                self.connection.commit()
+                return result
+        except Exception as error:
+            raise error
 
 
-    def get_all_categories_with_sum_of_amount(self):
-        categories_with_sum_of_amount_quary: str =  """ SELECT Category.category, SUM(Bank_Transaction.amount),
-                                                        FROM Bank_Transaction JOIN TransactionCategory
-                                                        ON Bank_Transaction.id = TransactionCategory.transaction_id
-                                                        JOIN Category
-                                                        ON Category.id = TransactionCategory.category_id
-                                                        GROUP BY Category.category"""
-        with self.connection.cursor() as cursor:
-            cursor.execute(categories_with_sum_of_amount_quary)
-            result = cursor.fetchall()
-            return result
+    def get_all_categories_with_sum_of_amount(self) -> list[Transaction]:
+        categories_with_sum_of_amount_quary: str =  """SELECT category, sum(amount) FROM bank_transaction GROUP BY category"""
+        
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(categories_with_sum_of_amount_quary)
+                res = cursor.fetchall()
+                return res
+        except Exception as error:
+            raise error
+    
 
 db_manager = DB_Manager()
 
-print("fd")
-print(db_manager.get_all_transactions_with_categories())
-print("o")
+# t = Transaction(3,23,"v4","c4")
+# print("fd")
+# print(db_manager.add_transaction(t))
+# print(db_manager.delete_by_one_number_key("Bank_transaction", "id", 2))
+# print(db_manager.get_all_table("Bank_transaction"))
+# print(type(db_manager.get_all_categories_with_sum_of_amount()))
+# print("o")
+
