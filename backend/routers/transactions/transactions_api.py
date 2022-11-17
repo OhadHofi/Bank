@@ -27,7 +27,7 @@ def add_transaction(transaction:Transaction, response: Response):
 
 
 @router.delete("/transactions/{transactions_id}")
-def delete_hero(transactions_id: int, response: Response):
+def delete_transaction(transactions_id: int, response: Response):
     try:
         response.status_code = status.HTTP_204_NO_CONTENT
         return {"transactions": db_manager.delete_by_one_number_key("Bank_transaction", "id", transactions_id)}
