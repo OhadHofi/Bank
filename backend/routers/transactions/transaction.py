@@ -5,7 +5,7 @@ class Transaction(BaseModel):
     id : int = None
     amount : float
     vendor : str = None
-    category : str = None
+    category : str
 
 
     def set_id(self, id):

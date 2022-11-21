@@ -1,0 +1,28 @@
+input{
+    display: block;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.operation-button{
+    width: 30%;
+    margin: 15px;
+}
+
+.operation-container{
+    padding: 70px 0;
+    margin: auto;
+    width: 40%;
+    text-align: center;
+}
+
+.deposit{
+    background-color: green;
+    left: 0;
+}
+
+.withdrow{
+    background-color: red;
+    right: 0;
+}

@@ -46,3 +46,12 @@ def get_amount_by_category(response: Response):
         return error
 
     
+@router.get("/transactions/balance")
+def get_amount_by_category(response: Response):
+    try:
+        return db_manager.get_balance()
+    except Exception as error:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return error
+
+    

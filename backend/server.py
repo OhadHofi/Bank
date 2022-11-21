@@ -5,11 +5,9 @@ import uvicorn
 
 
 app = FastAPI()
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
+origins = [ #how can get to the serevr
     "http://localhost",
-    "http://localhost:8080",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
@@ -22,6 +20,7 @@ app.add_middleware(
 
 app.include_router(transactions_api.router)
 
+
 @app.get("/")
 def root():
     return "server is running"
@@ -29,4 +28,3 @@ def root():
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="localhost", port=8000, reload=True)
-
