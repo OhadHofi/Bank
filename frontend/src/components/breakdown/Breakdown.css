@@ -1,0 +1,24 @@
+/* .breakdown-container{
+    padding: 70px 0;
+    margin: auto;
+    text-align: center;
+    background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSybQ0OgNQ1CoeyBTAIQ7-q1fhG33x-PoJ6lA&usqp=CAU);
+    width: 40%;
+} */
+
+.breakdown-container{
+    padding: 40px 0;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    background: url(https://4kwallpapers.com/images/walls/thumbs_3t/8324.png) no-repeat center center fixed; 
+    height: 100%;
+
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+

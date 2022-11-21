@@ -1,0 +1,48 @@
+.transaction {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .transaction td, .transaction th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .transaction tr:hover {background-color: rgb(141, 255, 234);}
+
+  .transaction th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+
+.transaction-container {
+    margin: 20px;
+    display: inline-block;
+    padding: 20px;
+}
+
+.non-negative{
+    background-image: url(https://1001freedownloads.s3.amazonaws.com/vector/thumb/336544/GreenBokehBackground.jpg);
+}
+
+.negative{
+    background-image: url(https://img.freepik.com/free-photo/merry-christmas-red-background_1361-3542.jpg?w=2000);
+}
+
+
+
+.text{
+    width: 200px;
+}
+
+.number{
+    width: 50px;
+}
+
+.transaction-button{
+  background-color: red;
+}
